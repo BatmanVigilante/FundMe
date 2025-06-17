@@ -13,7 +13,7 @@ contract FundMeTest is Test {
     address USER = makeAddr("user");
     uint256 constant SEND_VALUE = 0.1 ether;
     uint256 constant STARTING_BALANCE = 10 ether;
-    uint256 constant GAS_PRICE = 1 gwei ;
+    uint256 constant GAS_PRICE = 1 gwei;
 
     function setUp() external {
         // fundMe = new FundMe(0x694AA1769357215DE4FAC081bf1f309aDC325306);
@@ -57,7 +57,7 @@ contract FundMeTest is Test {
         assertEq(funder, USER);
     }
 
-    modifier funded(){
+    modifier funded() {
         vm.prank(USER);
         fundMe.fund{value: SEND_VALUE}();
         _;
@@ -79,22 +79,21 @@ contract FundMeTest is Test {
         vm.prank(fundMe.getOwner());
         fundMe.withdraw();
 
-        uint256 gasEnd = gasleft(); 
-        uint256 gasUsed = (gastStart - gasEnd)*tx.gasprice;
+        uint256 gasEnd = gasleft();
+        uint256 gasUsed = (gastStart - gasEnd) * tx.gasprice;
         console.log(gasUsed);
-        
+
         //Assert
         uint256 endingOwnerBalance = fundMe.getOwner().balance;
         uint256 endingFundMeBalance = address(fundMe).balance;
         assertEq(endingFundMeBalance, 0);
         assertEq(endingOwnerBalance, startingOwnerBalance + startingFundMeBalance);
-
     }
 
-    function testWithdrawFromMultipleFunders() public funded{
+    function testWithdrawFromMultipleFunders() public funded {
         uint160 numberOfFunders = 10;
         uint256 startingFunderIndex = 2;
-        for(uint256 i = startingFunderIndex; i < numberOfFunders; i++){
+        for (uint256 i = startingFunderIndex; i < numberOfFunders; i++) {
             // vm.prank(fundMe.getFunder(i));
             // fundMe.withdraw();
             //vm.prank new address
@@ -113,13 +112,14 @@ contract FundMeTest is Test {
         vm.stopPrank();
         //Assert
 
-        assert(address(fundMe).balance== 0);
+        assert(address(fundMe).balance == 0);
         assert(startingOwnerBalance + startingFundMeBalance == fundMe.getOwner().balance);
     }
-    function testCheaperWithdrawFromMultipleFunders() public funded{
+
+    function testCheaperWithdrawFromMultipleFunders() public funded {
         uint160 numberOfFunders = 10;
         uint256 startingFunderIndex = 2;
-        for(uint256 i = startingFunderIndex; i < numberOfFunders; i++){
+        for (uint256 i = startingFunderIndex; i < numberOfFunders; i++) {
             // vm.prank(fundMe.getFunder(i));
             // fundMe.withdraw();
             //vm.prank new address
@@ -138,10 +138,9 @@ contract FundMeTest is Test {
         vm.stopPrank();
         //Assert
 
-        assert(address(fundMe).balance== 0);
+        assert(address(fundMe).balance == 0);
         assert(startingOwnerBalance + startingFundMeBalance == fundMe.getOwner().balance);
     }
-
 }
 
 // us -> FundMeTest -> Fund
